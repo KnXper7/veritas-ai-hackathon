@@ -1,0 +1,161 @@
+/* Mixed Signals
+   Style in one line: quiet and precise. Thin lines, one typeface, lots of white space.
+   Colour always means a language: blue = English, amber = Telugu, red = Polish.
+   Signature elements: the language mix bar, signal-strength meters, icons drawn from bars.
+   Layout: one narrow column, like a phone app, on every screen size. */
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --ink:#131A24; --muted:#5F6B7A; --line:#E1E5EB;
+  --en:#2463D6; --en-bg:#E8F0FE;
+  --te:#B26A00; --te-bg:#FCF1D8;
+  --pl:#B8254A; --pl-bg:#FCE7EC;
+  --ot:#5F6B7A; --ot-bg:#ECEFF3;
+  --good:#1B7F56; --bad:#B4232F;
+  --font:"Geist Variable","Noto Sans Telugu",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --nav-h:60px; --r:14px;
+  --lift:0 1px 2px rgba(19,26,36,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0E1217; --surface:#161B22; --ink:#E9EDF2; --muted:#94A0AF; --line:#262E39;
+    --en:#8DB4FF; --en-bg:#172846; --te:#EDBE62; --te-bg:#35290F; --pl:#FF93AE; --pl-bg:#3F1726;
+    --ot:#94A0AF; --ot-bg:#222A34; --good:#5FD3A2; --bad:#FF8B93;
+    --lift:none;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+html{-webkit-tap-highlight-color:transparent;scroll-padding-top:70px}
+body{overscroll-behavior-y:none}
+::selection{background:var(--en-bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+h1,h2{margin:0;line-height:1.2;letter-spacing:-.015em}
+h1{font-size:1.5rem;font-weight:650}
+h2{font-size:1rem;font-weight:600}
+p{margin:0}
+a{color:inherit}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+[hidden]{display:none !important}
+
+/* ---------- shell ---------- */
+.top{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.top .in{max-width:640px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:8px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:650;font-size:1.05rem;letter-spacing:-.01em;margin-right:auto}
+.brand svg{width:26px;height:26px;flex:none}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:5px 10px;text-decoration:none}
+.chip:hover,.iconbtn:hover{color:var(--ink)}
+.iconbtn{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;color:var(--muted)}
+.iconbtn[aria-current="page"]{color:var(--ink)}
+
+main{max-width:640px;margin:0 auto;padding:20px 16px calc(var(--nav-h) + 32px + env(safe-area-inset-bottom))}
+.screen{display:flex;flex-direction:column;gap:14px}
+
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.nav .in{max-width:640px;margin:0 auto;height:var(--nav-h);display:grid;grid-template-columns:repeat(4,1fr)}
+.nav a:hover{color:var(--ink)}
+.nav a{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.7rem;font-weight:600;color:var(--muted);text-decoration:none}
+.nav a[aria-current="page"]{color:var(--ink)}
+/* the active tab wears the logo: a bar that switches language halfway */
+.nav a[aria-current="page"]::before{content:"";position:absolute;top:-1px;width:28px;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--en) 50%,var(--te) 50%)}
+
+/* ---------- icons: drawn from short round bars; one bar is the "switch" ---------- */
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+[aria-current="page"] svg.i .sw{stroke:var(--te)}
+.nav a:nth-child(even)[aria-current="page"] svg.i .sw{stroke:var(--en)}
+
+/* signal-strength meter: used for level and for how common a phrase is */
+.sig{display:inline-flex;align-items:flex-end;gap:2px;height:14px;vertical-align:-2px}
+.sig i{width:3px;border-radius:1.5px;background:var(--line)}
+.sig i.on{background:var(--ink)}
+.sig i:nth-child(1){height:4px}.sig i:nth-child(2){height:6.5px}.sig i:nth-child(3){height:9px}.sig i:nth-child(4){height:11.5px}.sig i:nth-child(5){height:14px}
+
+/* ---------- building blocks ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--lift);padding:16px;display:flex;flex-direction:column;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.between{justify-content:space-between}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.row .field{flex:1 1 150px}
+label{font-weight:600;font-size:.875rem}
+textarea,input,select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
+textarea{min-height:84px;resize:vertical;font-size:1.05rem}
+:is(textarea,input,select):hover{border-color:var(--muted)}
+.btn{font:inherit;font-weight:600;background:var(--ink);color:var(--surface);border:0;border-radius:10px;padding:11px 20px;cursor:pointer;min-height:46px}
+.btn:hover:not([disabled]){opacity:.88}
+.btn:active:not([disabled]),.ghost:active{opacity:.7}
+.btn[disabled]{opacity:.4;cursor:default}
+.btn.wide{width:100%}
+.ghost{font:inherit;font-size:.875rem;font-weight:500;background:none;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer;min-height:38px}
+.ghost:hover{border-color:var(--muted)}
+:is(a,button,textarea,input,select,summary):focus-visible{outline:2px solid var(--en);outline-offset:2px}
+.mic{display:inline-flex;align-items:center;gap:8px}
+.mic svg.i{width:20px;height:20px}
+.mic[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.mic[aria-pressed="true"] svg.i .sw{stroke:currentColor}
+#speech select{width:auto;flex:0 1 150px;padding:7px 10px;font-size:.875rem;min-height:38px}
+.status{font-size:.9rem;border-left:3px solid var(--bad);padding:2px 0 2px 12px}
+.status.busy{border-color:var(--line);color:var(--muted)}
+.status a{font-weight:600}
+.tag{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.tag.live{color:var(--good);border-color:currentColor}
+
+/* ---------- the sentence ---------- */
+/* mix bar: how much of the sentence is in each language */
+.mix{flex:1;display:flex;gap:3px;height:6px}
+.mix i{display:block;min-width:6px;border-radius:3px}
+.mix .en{background:var(--en)}.mix .te{background:var(--te)}.mix .pl{background:var(--pl)}.mix .ot{background:var(--ot)}
+.mix .tl{background:repeating-linear-gradient(135deg,var(--te) 0 4px,var(--te-bg) 4px 7px)}
+.strip{font-size:1.3rem;line-height:1.9;overflow-wrap:anywhere;font-weight:500;letter-spacing:-.005em}
+.seg{padding:2px 2px 1px;border-bottom:2px solid;border-radius:4px 4px 0 0;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.seg.en{background:var(--en-bg);border-color:var(--en)}
+.seg.te,.seg.tl{background:var(--te-bg);border-color:var(--te)}
+.seg.tl{border-bottom-style:dashed}
+.seg.pl{background:var(--pl-bg);border-color:var(--pl)}
+.seg.ot{background:var(--ot-bg);border-color:var(--ot)}
+/* a Telugu word with its English letters underneath */
+.w{display:inline-flex;flex-direction:column;align-items:center;line-height:1.35;margin-bottom:6px}
+.w .r{font-size:.56em;color:var(--muted);font-weight:500;line-height:1.2;margin-top:4px;letter-spacing:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.8rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.key{width:12px;height:4px;border-radius:2px}
+.key.en{background:var(--en)}.key.te{background:var(--te)}.key.pl{background:var(--pl)}.key.ot{background:var(--ot)}
+.key.tl{background:repeating-linear-gradient(135deg,var(--te) 0 3px,var(--te-bg) 3px 5px)}
+.tr{color:var(--muted);font-weight:400;font-size:.9em}
+.tr.block{display:block;font-size:.95rem;letter-spacing:0}
+
+.means{font-size:1.2rem;font-weight:600;line-height:1.35;letter-spacing:-.01em;overflow-wrap:anywhere}
+.lit{color:var(--muted);overflow-wrap:anywhere}
+
+/* phrases you can open and save */
+details.ph{border:1px solid var(--line);border-radius:10px}
+details.ph summary{list-style:none;cursor:pointer;padding:12px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+details.ph summary::-webkit-details-marker{display:none}
+details.ph summary b{overflow-wrap:anywhere;font-weight:600}
+details.ph summary svg{flex:none;color:var(--muted)}
+details.ph[open] summary svg{transform:rotate(45deg)}
+details.ph .body{padding:0 12px 12px;display:flex;flex-direction:column;gap:12px}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:.92rem}
+dt{color:var(--muted)}
+dd{margin:0;overflow-wrap:anywhere}
+
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:3px;background:var(--ink)}
+.item{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0;padding-top:0}
+.item:last-child{padding-bottom:0}
+.item .main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.item b{font-weight:600;overflow-wrap:anywhere}
+.x{font:inherit;display:grid;place-items:center;width:36px;height:36px;flex:none;border:0;background:none;color:var(--muted);cursor:pointer;border-radius:8px}
+.flash{align-items:center;text-align:center;padding:40px 20px;gap:16px}
+.flash .big{font-size:1.6rem;font-weight:650;letter-spacing:-.015em;overflow-wrap:anywhere;line-height:1.25}
+
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;padding:8px 8px 8px 0;border-top:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}
+th{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;border-top:0}
+.num{text-align:right;font-variant-numeric:tabular-nums;padding-right:0}
+.scroll{overflow-x:auto}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 14px + env(safe-area-inset-bottom));z-index:9;background:var(--ink);color:var(--surface);font-weight:500;font-size:.875rem;padding:9px 16px;border-radius:8px;max-width:calc(100% - 32px);text-align:center;opacity:0;pointer-events:none}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:no-preference){.mic[aria-pressed="true"] svg.i{animation:beat 1.1s ease-in-out infinite}@keyframes beat{50%{opacity:.45}}html{scroll-behavior:smooth}#result>*{animation:rise .25s ease both}@keyframes rise{from{opacity:0;transform:translateY(4px)}}#toast{transition:opacity .2s}.bar i{transition:width .3s}details.ph summary svg{transition:transform .15s}}

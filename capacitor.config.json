@@ -1,0 +1,10 @@
+{
+  "appId": "com.mixedsignals.app",
+  "appName": "Mixed Signals",
+  "webDir": "www",
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}

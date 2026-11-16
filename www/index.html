@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161B22" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Understand conversations that switch languages mid-sentence and say things they don't literally mean.">
+<title>Mixed Signals</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mixed Signals">
+<meta property="og:title" content="Mixed Signals">
+<meta property="og:description" content="Understand conversations that switch languages mid-sentence.">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<noscript><p style="padding:24px;font-family:system-ui">Mixed Signals needs JavaScript to run.</p></noscript>
+
+<header class="top"><div class="in">
+  <a class="brand" href="#translate">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#131A24"/><path d="M7 12h18M7 20h7" stroke="#8DB4FF" stroke-width="3" stroke-linecap="round"/><path d="M18.5 20H25" stroke="#EDBE62" stroke-width="3" stroke-linecap="round"/></svg>
+    Mixed Signals
+  </a>
+  <a class="chip" href="#bank" id="lvl-chip">Lv 1</a>
+  <a class="iconbtn" href="#settings" data-s="settings" aria-label="Settings">
+    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h7M19 8h1M4 16h1M13 16h7"/><circle class="sw" cx="15" cy="8" r="2.4"/><circle class="sw" cx="9" cy="16" r="2.4"/></svg>
+  </a>
+</div></header>
+
+<main>
+  <!-- TRANSLATE -->
+  <section class="screen" id="s-translate">
+    <form class="card" id="form">
+      <div class="field">
+        <label for="utterance">What did you hear?</label>
+        <textarea id="utterance" placeholder="Type it. Mixing languages is fine." enterkeyhint="go" autocapitalize="sentences" spellcheck="false"></textarea>
+      </div>
+      <div class="row" id="speech" hidden>
+        <button class="ghost mic" id="mic" type="button" aria-pressed="false">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0"/><path class="sw" d="M12 18v2.5"/></svg>
+          <span id="mic-label">Speak</span>
+        </button>
+        <select id="speechlang" aria-label="Language you will speak">
+          <option value="en-US">English</option>
+          <option value="te-IN">Telugu</option>
+          <option value="pl-PL">Polish</option>
+        </select>
+      </div>
+      <div class="row" style="align-items:flex-end">
+        <div class="field">
+          <label for="target">I understand</label>
+          <select id="target">
+            <option value="en">English</option>
+            <option value="te">Telugu</option>
+            <option value="pl">Polish</option>
+          </select>
+        </div>
+        <button class="btn" id="go" type="submit">Decode</button>
+      </div>
+      <div class="row" id="examples"></div>
+      <p class="status" id="status" role="status" hidden></p>
+    </form>
+    <div class="card" id="result" aria-live="polite"></div>
+  </section>
+
+  <!-- WORDS -->
+  <section class="screen" id="s-bank" hidden>
+    <h1>Words</h1>
+    <div class="card" id="progress"></div>
+    <div class="card" id="bank"></div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="screen" id="s-practice" hidden>
+    <h1>Practice</h1>
+    <div class="card flash" id="practice"></div>
+  </section>
+
+  <!-- CHECK -->
+  <section class="screen" id="s-check" hidden>
+    <h1>Check</h1>
+    <p class="muted">Is the model right? Rated by real speakers. Live results only.</p>
+    <div class="card"><h2>By language mix</h2><div class="scroll" id="tally"></div></div>
+    <div class="card">
+      <div class="row between"><h2>Rated sentences</h2><button class="ghost" id="copycsv" type="button">Copy CSV</button></div>
+      <div class="scroll" id="log"></div>
+      <textarea id="csv" readonly hidden aria-label="Results as CSV"></textarea>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="screen" id="s-settings" hidden>
+    <h1>Settings</h1>
+    <div class="card">
+      <div class="row between"><h2>Live model</h2><span class="tag" id="engine-tag">Examples only</span></div>
+      <div class="field"><label for="gkey">Gemini API key</label><input id="gkey" type="password" autocomplete="off" spellcheck="false" placeholder="Free key from Google AI Studio"></div>
+      <div class="field"><label for="gmodel">Model</label><input id="gmodel" spellcheck="false"></div>
+      <p class="muted small">Stays on this device. Sent only to Google.</p>
+    </div>
+    <div class="card">
+      <h2>Telugu</h2>
+      <div class="field">
+        <label for="script">Show as</label>
+        <select id="script">
+          <option value="both">తెలుగు + English letters</option>
+          <option value="letters">English letters only</option>
+          <option value="script">తెలుగు only</option>
+        </select>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Data</h2>
+      <button class="ghost" id="wipe" type="button" style="align-self:flex-start">Clear words and results</button>
+    </div>
+    <p class="muted small">Speak button: your browser sends your voice to its own speech service (Google, in Chrome) to turn it into text. Nothing is stored by this app. Only record yourself, never other people without permission.</p>
+    <p class="muted small">Prototype.</p>
+  </section>
+</main>
+
+<nav class="nav" aria-label="Main"><div class="in">
+  <a href="#translate" data-s="translate"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h6"/><path class="sw" d="M14.5 16H20"/></svg>Decode</a>
+  <a href="#bank" data-s="bank"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h10"/><path class="sw" d="M5 18h5"/></svg><span>Words <span id="n-bank"></span></span></a>
+  <a href="#practice" data-s="practice"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="3.5"/><path class="sw" d="M8 12h8"/></svg>Practice</a>
+  <a href="#check" data-s="check"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13l5 5"/><path class="sw" d="M9 18L20 6"/></svg><span>Check <span id="n-check"></span></span></a>
+</div></nav>
+
+<div id="toast" role="status"></div>
+
+<script src="js/data.js"></script>
+<script src="js/translit.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
